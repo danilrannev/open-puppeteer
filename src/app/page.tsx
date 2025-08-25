@@ -2,17 +2,19 @@
 
 import { Copy, Github, LoaderCircle } from "lucide-react";
 import { useState, useEffect } from "react";
+import { PageStatusResponse } from "@/types";
 
 export default function Home() {
-  const [url, setUrl] = useState("");
-  const [status, setStatus] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [apiEndpoint, setapiEndpoint] = useState(false);
+  const [url, setUrl] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [apiEndpoint, setapiEndpoint] = useState<string>("");
 
   useEffect(() => {
     setapiEndpoint(`${process.env.NEXT_PUBLIC_APP_DOMAIN}api/pptr?url=`);
   }, []);
-  async function fetchPageStatus() {
+
+  async function fetchPageStatus(): Promise<void> {
     if (url === "") {
       alert("Enter valid url");
       return;
@@ -23,17 +25,18 @@ export default function Home() {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_APP_DOMAIN}api/pptr?url=${url}`
       );
-      const data = await response.json();
+      const data: PageStatusResponse = await response.json();
       const { is200 } = data;
-      setStatus(is200 ? 200 : 404);
+      setStatus(is200 ? "200" : "404");
       return;
     } catch (error) {
       console.error("Error fetching page status:", error);
-      return null;
+      return;
     } finally {
       setIsLoading(false);
     }
   }
+
   return (
     <div className="container mx-auto flex flex-col items-center justify-center min-h-screen px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-2 text-gray-800 flex gap-2 justify-center items-center">
@@ -66,7 +69,7 @@ export default function Home() {
               type="url"
               placeholder="https://example.com"
               value={url}
-              onChange={(e) => setUrl(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
               className="flex-grow border rounded-md p-4 text-black"
             />
             <div
