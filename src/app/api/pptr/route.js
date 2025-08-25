@@ -5,7 +5,7 @@ import puppeteer from "puppeteer";
 export const dynamic = "force-dynamic";
 
 const remoteExecutablePath =
-  "https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar";
+  "https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar";
 
 let browser;
 
