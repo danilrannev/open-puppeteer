@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@sparticuz/chromium": "^130.0.0",
-    "@sparticuz/chromium-min": "121.0.0",
+    "@sparticuz/chromium-min": "133.0.0",
     "puppeteer-core": "^21.9.0",
     "lucide-react": "^0.456.0",
     "next": "15.0.3",
