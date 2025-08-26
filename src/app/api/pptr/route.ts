@@ -6,7 +6,7 @@ import { NextRequest } from "next/server";
 export const dynamic = "force-dynamic";
 
 const remoteExecutablePath =
-  "https://github.com/Sparticuz/chromium/releases/download/v138.0.2/chromium-v138.0.2-pack.arm64.tar";
+  "https://github.com/Sparticuz/chromium/releases/download/v138.0.2/chromium-v138.0.2-pack.x64.tar";
 
 let browser: any = null;
 
