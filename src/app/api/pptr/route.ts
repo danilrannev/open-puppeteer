@@ -8,31 +8,28 @@ export const dynamic = "force-dynamic";
 const remoteExecutablePath =
   "https://github.com/Sparticuz/chromium/releases/download/v138.0.2/chromium-v138.0.2-pack.x64.tar";
 
-let browser: any = null;
-
-async function getBrowser() {
-  if (browser) return browser;
-
+async function createBrowser() {
   if (process.env.NEXT_PUBLIC_VERCEL_ENVIRONMENT === "production") {
-    browser = await puppeteerCore.launch({
+    return await puppeteerCore.launch({
       args: chromium.args,
       executablePath: await chromium.executablePath(remoteExecutablePath),
       headless: true,
     });
   } else {
-    browser = await puppeteer.launch({
+    return await puppeteer.launch({
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
       headless: true,
     });
   }
-  return browser;
 }
 
 async function checkPageStatus(content: string) {
-  let statusCode: number;
+  let browser = null;
+  let page = null;
   try {
-    const browser = await getBrowser();
-    const page = await browser.newPage();
+    // Create a fresh browser instance for each request
+    browser = await createBrowser();
+    page = await browser.newPage();
     
     await page.setContent(content, { waitUntil: 'networkidle0' });
     
@@ -46,11 +43,27 @@ async function checkPageStatus(content: string) {
         left: '0mm'
       }
     });
-    await browser.close();
+    
     return Buffer.from(pdfData);
   } catch (error) {
     console.error('Error generating PDF:', error);
     return null;
+  } finally {
+    // Close both page and browser for each request
+    if (page) {
+      try {
+        await page.close();
+      } catch (closeError) {
+        console.error('Error closing page:', closeError);
+      }
+    }
+    if (browser) {
+      try {
+        await browser.close();
+      } catch (closeError) {
+        console.error('Error closing browser:', closeError);
+      }
+    }
   }
 }
 
