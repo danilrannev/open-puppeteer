@@ -49,6 +49,7 @@ async function checkPageStatus(content: string) {
     await browser.close();
     return Buffer.from(pdfData);
   } catch (error) {
+    console.error('Error generating PDF:', error);
     return null;
   }
 }
